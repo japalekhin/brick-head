@@ -2,16 +2,41 @@ import 'dart:ui';
 
 import 'package:box2d_flame/box2d.dart' hide Timer;
 import 'package:brick_head/brick-game.dart';
+import 'package:flutter/widgets.dart';
 
 class Brick {
   final BrickGame game;
   Body body;
 
+  TextPainter tp;
+  Offset to;
+
   Paint paint;
   PolygonShape shape; // for physics
   Path path; // for appearance
 
-  Brick(this.game, Vector2 position) {
+  int _hp;
+  int get hp {
+    return _hp;
+  }
+
+  set hp(int value) {
+    _hp = value;
+    tp.text = TextSpan(
+      text: _hp.toString(),
+      style: game.textStyle,
+    );
+    tp.layout();
+    to = Offset(tp.width / -2, .0625);
+  }
+
+  Brick(this.game, Vector2 position, {int hp}) {
+    hp ??= 300;
+    tp = TextPainter();
+    tp.textAlign = TextAlign.center;
+    tp.textDirection = TextDirection.ltr;
+    this.hp = hp;
+
     List<Vector2> vectors = <Vector2>[
       Vector2(-.25, -.25),
       Vector2(.25, -.25),
@@ -54,6 +79,7 @@ class Brick {
     c.save();
     c.translate(body.position.x, body.position.y);
     c.drawPath(path, paint);
+    tp.paint(c, to);
     c.restore();
   }
 

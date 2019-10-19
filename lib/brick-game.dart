@@ -6,11 +6,13 @@ import 'package:brick_head/components/brick.dart';
 import 'package:brick_head/components/horizontal-wall.dart';
 import 'package:brick_head/components/vertical-wall.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/painting.dart';
 
 class BrickGame extends Game implements ContactListener, ContactFilter {
   World world;
   Size screenSize;
   Size tileGrid;
+  TextStyle textStyle = TextStyle(fontSize: .25);
 
   List<Brick> bricks;
   List<Ball> balls;
@@ -82,7 +84,13 @@ class BrickGame extends Game implements ContactListener, ContactFilter {
       bricks = List<Brick>();
       for (double y = -7.5; y <= -.5; y += .5) {
         for (double x = -4; x <= 4; x += .5) {
-          bricks.add(Brick(this, Vector2(x, y)));
+          bricks.add(
+            Brick(
+              this,
+              Vector2(x, y),
+              hp: 300 - y.toInt(),
+            ),
+          );
         }
       }
     }
