@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:box2d_flame/box2d.dart' hide Timer;
 import 'package:brick_head/components/ball.dart';
 import 'package:brick_head/components/brick.dart';
+import 'package:brick_head/components/horizontal-wall.dart';
+import 'package:brick_head/components/vertical-wall.dart';
 import 'package:flame/game.dart';
 
 class BrickGame extends Game implements ContactListener {
@@ -12,6 +14,10 @@ class BrickGame extends Game implements ContactListener {
 
   List<Brick> bricks;
   List<Ball> balls;
+  HorizontalWall topWall;
+  HorizontalWall bottomWall;
+  VerticalWall leftWall;
+  VerticalWall rightWall;
 
   BrickGame() {
     world = World.withPool(
@@ -33,6 +39,10 @@ class BrickGame extends Game implements ContactListener {
 
     bricks.forEach((Brick b) => b.render(c));
     balls.forEach((Ball b) => b.render(c));
+    topWall.render(c);
+    bottomWall.render(c);
+    leftWall.render(c);
+    rightWall.render(c);
 
     c.restore();
   }
@@ -45,6 +55,10 @@ class BrickGame extends Game implements ContactListener {
 
     bricks.forEach((Brick b) => b.update(t));
     balls.forEach((Ball b) => b.update(t));
+    topWall.update(t);
+    bottomWall.update(t);
+    leftWall.update(t);
+    rightWall.update(t);
   }
 
   @override
@@ -65,6 +79,20 @@ class BrickGame extends Game implements ContactListener {
     // balls
     if (balls == null) {
       balls = List<Ball>();
+    }
+
+    // walls
+    if (topWall == null) {
+      topWall = HorizontalWall(this, Vector2(0, -7.875), 8.75);
+    }
+    if (bottomWall == null) {
+      bottomWall = HorizontalWall(this, Vector2(0, 7.875), 8.75);
+    }
+    if (leftWall == null) {
+      leftWall = VerticalWall(this, Vector2(-4.375, 0), 15.75);
+    }
+    if (rightWall == null) {
+      rightWall = VerticalWall(this, Vector2(4.375, 0), 15.75);
     }
   }
 
