@@ -93,7 +93,7 @@ class BrickGame extends Game implements ContactListener, ContactFilter {
             Brick(
               this,
               Vector2(x, y),
-              hp: 300 - y.toInt(),
+              hp: 75 - y.toInt(),
             ),
           );
         }
