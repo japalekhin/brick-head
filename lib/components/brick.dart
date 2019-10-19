@@ -80,7 +80,7 @@ class Brick {
 
   void impact() {
     hp -= 1;
-    if (hp == 0) {
+    if (hp <= 0) {
       isForDestruction = true;
     }
   }
