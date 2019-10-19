@@ -66,7 +66,7 @@ class BrickGame extends Game implements ContactListener, ContactFilter {
     rightWall.update(t);
 
     spawnOnZero -= t;
-    if (spawnOnZero <= 0 && balls.length < 500) {
+    if (spawnOnZero <= 0 && balls.length < 400) {
       balls.add(Ball(this, Vector2(0, 0)));
       spawnOnZero = .0375;
     }
@@ -80,7 +80,7 @@ class BrickGame extends Game implements ContactListener, ContactFilter {
     // bricks
     if (bricks == null) {
       bricks = List<Brick>();
-      for (double y = -7.5; y <= -2.5; y += .5) {
+      for (double y = -7.5; y <= -.5; y += .5) {
         for (double x = -4; x <= 4; x += .5) {
           bricks.add(Brick(this, Vector2(x, y)));
         }
