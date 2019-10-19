@@ -44,7 +44,7 @@ class Brick {
     FixtureDef fd = FixtureDef();
     fd.density = 20;
     fd.restitution = 1;
-    fd.friction = 1;
+    fd.friction = 0;
     fd.shape = shape;
     Fixture ff = body.createFixtureFromFixtureDef(fd);
     ff.userData = 'brick';
