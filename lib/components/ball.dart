@@ -17,8 +17,6 @@ class Ball {
 
     paint = Paint();
     paint.color = Color(0xffffffff);
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = .5;
 
     BodyDef bd = BodyDef();
     bd.linearVelocity = Vector2.zero();
