@@ -7,7 +7,7 @@ import 'package:brick_head/components/horizontal-wall.dart';
 import 'package:brick_head/components/vertical-wall.dart';
 import 'package:flame/game.dart';
 
-class BrickGame extends Game implements ContactListener {
+class BrickGame extends Game implements ContactListener, ContactFilter {
   World world;
   Size screenSize;
   Size tileGrid;
@@ -19,12 +19,15 @@ class BrickGame extends Game implements ContactListener {
   VerticalWall leftWall;
   VerticalWall rightWall;
 
+  double spawnOnZero = 0;
+
   BrickGame() {
     world = World.withPool(
       Vector2(0, 0),
       DefaultWorldPool(100, 10),
     );
     world.setContactListener(this);
+    world.setContactFilter(this);
   }
 
   @override
@@ -34,8 +37,8 @@ class BrickGame extends Game implements ContactListener {
     }
 
     c.save();
+    c.translate(screenSize.width / 2, screenSize.height / 2);
     c.scale(screenSize.width / 9);
-    c.translate(4.5, tileGrid.height * .5);
 
     bricks.forEach((Brick b) => b.render(c));
     balls.forEach((Ball b) => b.render(c));
@@ -53,12 +56,20 @@ class BrickGame extends Game implements ContactListener {
       return;
     }
 
+    world.stepDt(t, 100, 100);
+
     bricks.forEach((Brick b) => b.update(t));
     balls.forEach((Ball b) => b.update(t));
     topWall.update(t);
     bottomWall.update(t);
     leftWall.update(t);
     rightWall.update(t);
+
+    spawnOnZero -= t;
+    if (spawnOnZero <= 0 && balls.length < 500) {
+      balls.add(Ball(this, Vector2(0, 0)));
+      spawnOnZero = .0375;
+    }
   }
 
   @override
@@ -107,4 +118,12 @@ class BrickGame extends Game implements ContactListener {
 
   @override
   void preSolve(Contact contact, Manifold oldManifold) {}
+
+  @override
+  bool shouldCollide(Fixture fixtureA, Fixture fixtureB) {
+    if (fixtureA.userData == 'ball' && fixtureB.userData == 'ball') {
+      return false;
+    }
+    return true;
+  }
 }
