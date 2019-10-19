@@ -47,7 +47,7 @@ class HorizontalWall {
     fd.friction = 0;
     fd.shape = shape;
     Fixture ff = body.createFixtureFromFixtureDef(fd);
-    ff.userData = 'brick';
+    ff.userData = 'wall';
   }
 
   void render(Canvas c) {
