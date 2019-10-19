@@ -15,6 +15,9 @@ class Brick {
   PolygonShape shape; // for physics
   Path path; // for appearance
 
+  bool isForDestruction = false;
+  bool isForRemoval = false;
+
   int _hp;
   int get hp {
     return _hp;
@@ -73,6 +76,18 @@ class Brick {
     fd.shape = shape;
     Fixture ff = body.createFixtureFromFixtureDef(fd);
     ff.userData = 'brick';
+  }
+
+  void impact() {
+    hp -= 1;
+    if (hp == 0) {
+      isForDestruction = true;
+    }
+  }
+
+  void destroy() {
+    game.world.destroyBody(body);
+    isForRemoval = true;
   }
 
   void render(Canvas c) {
