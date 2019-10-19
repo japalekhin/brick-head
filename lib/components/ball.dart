@@ -7,6 +7,8 @@ class Ball {
   final BrickGame game;
   Body body;
 
+  bool isStarted = false;
+
   Paint paint;
   CircleShape shape;
 
@@ -21,6 +23,8 @@ class Ball {
     BodyDef bd = BodyDef();
     bd.linearVelocity = Vector2.zero();
     bd.position = position;
+    bd.fixedRotation = true;
+    bd.bullet = true;
     bd.type = BodyType.DYNAMIC;
     body = game.world.createBody(bd);
     body.userData = this;
@@ -28,7 +32,7 @@ class Ball {
     FixtureDef fd = FixtureDef();
     fd.density = 10;
     fd.restitution = 1;
-    fd.friction = 1;
+    fd.friction = 0;
     fd.shape = shape;
     Fixture ff = body.createFixtureFromFixtureDef(fd);
     ff.userData = 'ball';
@@ -37,16 +41,24 @@ class Ball {
   void render(Canvas c) {
     c.save();
     c.translate(body.position.x, body.position.y);
-    c.drawCircle(
-      Offset(
-        body.position.x,
-        body.position.y,
-      ),
-      .25,
-      paint,
-    );
+    c.drawCircle(Offset(0, 0), .25, paint);
     c.restore();
   }
 
-  void update(double t) {}
+  void update(double t) {
+    if (!isStarted) {
+      isStarted = true;
+      MassData data = MassData();
+      body.getMassData(data);
+
+      body.applyLinearImpulse(
+        Vector2(
+          data.mass * 15,
+          data.mass * -15,
+        ),
+        body.position,
+        true,
+      );
+    }
+  }
 }
