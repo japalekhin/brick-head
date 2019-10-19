@@ -72,6 +72,11 @@ class BrickGame extends Game implements ContactListener, ContactFilter {
       balls.add(Ball(this, Vector2(0, 0)));
       spawnOnZero = .0375;
     }
+
+    bricks
+        .where((Brick b) => b.isForDestruction)
+        .forEach((Brick b) => b.destroy());
+    bricks.removeWhere((Brick b) => b.isForRemoval);
   }
 
   @override
@@ -116,7 +121,14 @@ class BrickGame extends Game implements ContactListener, ContactFilter {
   }
 
   @override
-  void beginContact(Contact contact) {}
+  void beginContact(Contact contact) {
+    if (contact.fixtureA.userData == 'brick') {
+      (contact.fixtureA.getBody().userData as Brick).impact();
+    }
+    if (contact.fixtureB.userData == 'brick') {
+      (contact.fixtureB.getBody().userData as Brick).impact();
+    }
+  }
 
   @override
   void endContact(Contact contact) {}
